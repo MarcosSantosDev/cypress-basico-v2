@@ -14,6 +14,8 @@ describe('Central de Atendimento ao Cliente TAT', function () {
     // ---------------------- AULA 02 -------------------------------
 
     it('preenche os campos obrigatórios e envia o formulário', function () {
+        cy.clock()
+
         cy.get('form').within(function () {
             cy.get('input[name="firstName"]')
                 .should('be.visible')
@@ -43,6 +45,11 @@ describe('Central de Atendimento ao Cliente TAT', function () {
 
         cy.get('.success')
             .should('be.visible');
+
+        cy.tick(3000)
+
+        cy.get('.success')
+            .should('not.be.visible');
     })
 
     // Exercício extra 1
@@ -57,6 +64,8 @@ describe('Central de Atendimento ao Cliente TAT', function () {
 
     // Exercício extra 2
     it('exibe mensagem de erro ao submeter o formulário com um email com formatação inválida', function () {
+        cy.clock();
+
         cy.get('form').within(function () {
             cy.get('input[name="firstName"]')
                 .type('Marcos')
@@ -78,6 +87,12 @@ describe('Central de Atendimento ao Cliente TAT', function () {
 
         cy.get('.error')
             .should('be.visible');
+
+        cy.tick(3000)
+
+        cy.get('.error')
+            .should('not.be.visible');
+
     })
 
     // Exercício extra 3
@@ -91,6 +106,8 @@ describe('Central de Atendimento ao Cliente TAT', function () {
 
     // Exercício extra 4
     it('exibe mensagem de erro quando o telefone se torna obrigatório mas não é preenchido antes do envio do formulário', function () {
+        cy.clock()
+
         cy.get('form').within(function () {
             cy.get('input[name="firstName"]').type('mensagem de teste');
             cy.get('input[name="lastName"]').type('mensagem de teste');
@@ -108,6 +125,11 @@ describe('Central de Atendimento ao Cliente TAT', function () {
 
         cy.get('.error')
             .should('be.visible');
+
+        cy.tick(3000)
+
+        cy.get('.error')
+            .should('not.be.visible');
     })
 
     // Exercício extra 5
@@ -139,6 +161,8 @@ describe('Central de Atendimento ao Cliente TAT', function () {
 
     // Exercício extra 6
     it('exibe mensagem de erro ao submeter o formulário sem preencher os campos obrigatórios', function () {
+        cy.clock()
+
         cy.contains('button', 'Enviar')
             .should('be.visible')
             .click();
@@ -147,13 +171,27 @@ describe('Central de Atendimento ao Cliente TAT', function () {
             .should('be.visible')
             .find('strong')
             .should('have.text', 'Valide os campos obrigatórios!');
+
+        cy.tick(3000)
+
+        cy.get('.error')
+            .should('not.be.visible');
+
     })
 
     // Exercício extra 7 - custom comands
     it('envia o formuário com sucesso usando um comando customizado', function () {
+        cy.clock()
+
         cy.fillMandatoryFieldsAndSubmit();
 
-        cy.get('.success').should('be.visible');
+        cy.get('.success')
+            .should('be.visible');
+
+        cy.tick(3000)
+
+        cy.get('.success')
+            .should('not.be.visible');
     })
 
     // ---------------------- AULA 03 -------------------------------
@@ -213,10 +251,10 @@ describe('Central de Atendimento ao Cliente TAT', function () {
     })
 
     // ---------------------- AULA 06 -------------------------------
-    it('seleciona um arquivo da pasta fixtures', function() {
+    it('seleciona um arquivo da pasta fixtures', function () {
         cy.get('input[type="file"][id="file-upload"]')
             .selectFile('cypress/fixtures/example.json')
-            .then(function($input) {
+            .then(function ($input) {
                 const files = $input[0].files;
 
                 expect(files[0].name).to.eq('example.json');
@@ -224,25 +262,25 @@ describe('Central de Atendimento ao Cliente TAT', function () {
     })
 
 
-    it('seleciona um arquivo simulando um drag-and-drop', function() {
+    it('seleciona um arquivo simulando um drag-and-drop', function () {
         cy.get('input[type="file"][id="file-upload"]')
             .selectFile(
                 'cypress/fixtures/example.json',
                 { action: 'drag-drop' }
             )
-            .then(function($input) {
+            .then(function ($input) {
                 const files = $input[0].files;
 
                 expect(files[0].name).to.be.equal('example.json');
             })
     })
 
-    it('seleciona um arquivo utilizando uma fixture para a qual foi dada um alias', function() {
+    it('seleciona um arquivo utilizando uma fixture para a qual foi dada um alias', function () {
         cy.fixture('example.json').as('fileSelected');
 
         cy.get('input[type="file"][id="file-upload"]')
             .selectFile('@fileSelected')
-            .then(function($input) {
+            .then(function ($input) {
                 const files = $input[0].files;
 
                 expect(files[0].name).to.be.equal('example.json');
@@ -250,7 +288,7 @@ describe('Central de Atendimento ao Cliente TAT', function () {
     })
 
     // ---------------------- AULA 07 -------------------------------
-    it('verifica que a política de privacidade abre em outra aba sem a necessidade de um clique', function() {
+    it('verifica que a política de privacidade abre em outra aba sem a necessidade de um clique', function () {
         cy.get('a[href="privacy.html"]')
             .should('have.attr', 'target', '_blank')
     })
